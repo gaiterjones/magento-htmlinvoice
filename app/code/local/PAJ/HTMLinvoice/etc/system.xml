@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <paj_extensions translate="label" module="htmlinvoice">
+            <label>My Extensions</label>
+            <sort_order>210</sort_order>
+        </paj_extensions>
+    </tabs>
+    <sections>
+        <htmlinvoice_section1 translate="label" module="htmlinvoice">
+            <class>separator-top</class>
+            <label>HTML Invoice</label>
+            <tab>paj_extensions</tab>
+            <sort_order>500</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+                   <groups>
+					<general translate="label">
+						<label>HTML Invoice</label>
+						<frontend_type>text</frontend_type>
+						<sort_order>10</sort_order>
+						<show_in_default>1</show_in_default>
+						<show_in_website>1</show_in_website>
+						<show_in_store>1</show_in_store>
+						<fields>
+							<label1 translate="label comment">
+								<label>v0.11 - 19.11.2012</label>
+								<frontend_type>note</frontend_type>
+								<sort_order>10</sort_order>
+								<show_in_default>1</show_in_default>
+								<show_in_website>0</show_in_website>
+								<show_in_store>0</show_in_store>
+								<comment>
+								This Magento module creates a customiseable HTML invoice accessed via a new print button in the admin order view.
+								<![CDATA[Please visit <a href="http://blog.gaiterjones.com">blog.gaiterjones.com</a> for full documentation for this extension.]]>
+								</comment>
+							</label1>
+							<logourl translate="label comment">
+								<label>Logo URL:</label>
+								<frontend_type>text</frontend_type>
+								<sort_order>20</sort_order>
+								<show_in_default>1</show_in_default>
+								<show_in_website>1</show_in_website>
+								<show_in_store>1</show_in_store>
+								<comment>URL to logo image to use on the invoice i.e. http://www.mysite.com/mylogo.png, default if left blank is no logo image.</comment>
+							</logourl>
+							<watermark translate="label comment">
+								<label>Watermark URL:</label>
+								<frontend_type>text</frontend_type>
+								<sort_order>30</sort_order>
+								<show_in_default>1</show_in_default>
+								<show_in_website>1</show_in_website>
+								<show_in_store>1</show_in_store>
+								<comment>URL to watermark image to use on the invoice i.e. http://www.mysite.com/mywatermark.png, default if left blank is no watermark image.</comment>
+							</watermark>
+							<headertext translate="label comment">
+								<label>Header Text:</label>
+								<frontend_type>textarea</frontend_type>
+								<sort_order>40</sort_order>
+								<show_in_default>1</show_in_default>
+								<show_in_website>1</show_in_website>
+								<show_in_store>1</show_in_store>
+								<comment>Text to insert into header of invoice, i.e. company address etc.</comment>
+							</headertext>
+							<showcomments translate="label comment">
+								<label>Show comments box on invoice:</label>
+								<frontend_type>select</frontend_type>
+								<source_model>adminhtml/system_config_source_yesno</source_model>
+								<sort_order>50</sort_order>
+								<show_in_default>1</show_in_default>
+								<show_in_website>1</show_in_website>
+								<show_in_store>1</show_in_store>
+								<comment>Set to YES to enable comments box on invoice.</comment>
+							</showcomments>
+							<showimages translate="label comment">
+								<label>Show product image on invoice:</label>
+								<frontend_type>select</frontend_type>
+								<source_model>adminhtml/system_config_source_yesno</source_model>
+								<sort_order>55</sort_order>
+								<show_in_default>1</show_in_default>
+								<show_in_website>1</show_in_website>
+								<show_in_store>1</show_in_store>
+								<comment>Set to YES to show product image on invoice.</comment>
+							</showimages>
+							<footertext translate="label comment">
+								<label>Footer Text:</label>
+								<frontend_type>textarea</frontend_type>
+								<sort_order>60</sort_order>
+								<show_in_default>1</show_in_default>
+								<show_in_website>1</show_in_website>
+								<show_in_store>1</show_in_store>
+								<comment>Text to insert into footer of invoice.</comment>
+							</footertext>
+							<addshippingvat translate="label comment">
+								<label>Add VAT/TAX to Shipping total?:</label>
+								<frontend_type>select</frontend_type>
+								<source_model>adminhtml/system_config_source_yesno</source_model>
+								<sort_order>70</sort_order>
+								<show_in_default>1</show_in_default>
+								<show_in_website>1</show_in_website>
+								<show_in_store>1</show_in_store>
+								<comment>Set to YES to add TAX/VAT to shipping total.</comment>
+							</addshippingvat>							
+						</fields>						
+					</general>
+				</groups>
+        </htmlinvoice_section1>
+    </sections>
+ </config>

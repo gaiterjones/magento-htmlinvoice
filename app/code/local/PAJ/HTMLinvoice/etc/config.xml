@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <PAJ_HTMLinvoice>
+      <version>0.11</version>
+    </PAJ_HTMLinvoice>
+  </modules>
+  <global>
+    <helpers>
+      <htmlinvoice>
+        <class>PAJ_HTMLinvoice_Helper</class>
+      </htmlinvoice>
+    </helpers>
+	<blocks>
+		<htmlinvoice><class>PAJ_HTMLinvoice_Block</class></htmlinvoice>
+		<adminhtml>
+			<rewrite>
+				<sales_order_view>PAJ_HTMLinvoice_Block_Sales_Order_View</sales_order_view>
+			</rewrite>
+		</adminhtml>
+	</blocks>
+  </global>
+  <admin>
+    <routers>
+      <htmlinvoice>
+        <use>admin</use>
+        <args>
+          <module>PAJ_HTMLinvoice</module>
+          <frontName>htmlinvoice</frontName>
+        </args>
+      </htmlinvoice>
+    </routers>
+  </admin>
+	<adminhtml>
+		<acl>
+			<resources>
+				<admin>
+					<children>
+						<system>
+							<children>
+								<config>
+									<children>
+										<htmlinvoice_section1 translate="title" module="htmlinvoice">
+											<title>HTML Invoice Section 1 by PAJ</title>
+											<sort_order>10</sort_order>
+										</htmlinvoice_section1>
+									</children>
+								</config>
+							</children>
+						</system>
+					</children>
+				</admin>
+			</resources>
+		</acl>
+	</adminhtml>
+</config>
