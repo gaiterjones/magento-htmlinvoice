@@ -2,10 +2,11 @@
 /**
  *  HTML Invoice
  *  
- *  Copyright (C) 2012 paj@gaiterjones.com 
+ *  Copyright (C) 2013 paj@gaiterjones.com 
  *
  *  v0.0.1 - 11.06.2012 - dev BETA release
  *  v0.0.2 - 15.08.2012
+ 	v0.13 - 26.07.2013
  
  *	This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,10 +37,11 @@
 	$_showComments=trim(Mage::getStoreConfig('htmlinvoice_section1/general/showcomments',(int)$_orderStoreID));
 	$_showImages=trim(Mage::getStoreConfig('htmlinvoice_section1/general/showimages',(int)$_orderStoreID));
 	$_footerText=trim(Mage::getStoreConfig('htmlinvoice_section1/general/footertext',(int)$_orderStoreID));
-	$_addShippingVat=trim(Mage::getStoreConfig('htmlinvoice_section1/general/addshippingvat',(int)$_orderStoreID));
+	$_addVat=trim(Mage::getStoreConfig('htmlinvoice_section1/general/addvat',(int)$_orderStoreID));
+	$_vatRate=trim(Mage::getStoreConfig('htmlinvoice_section1/general/vatrate',(int)$_orderStoreID));
  
 	// add tax to shipping amount
-	if ($_addShippingVat)
+	if ($_addVat && $_vatRate)
 	{
 	$shippingInclTax = $_order->getShippingAmount() + $_order->getShippingTaxAmount();
 	$_order->setShippingAmount($shippingInclTax);
@@ -322,12 +324,16 @@ div.bottom div {
 		if ($_item->getParentItem()) continue;
 		
 		$_product = Mage::getModel('catalog/product')->load($_item->getProductId());
+		
+		// get image from either small image or normal image
 		$_imageURL = Mage::helper('catalog/image')->init($_product, 'small_image')->resize(50);
+		if (empty($_imageURL)) {$_imageURL = Mage::helper('catalog/image')->init($_product, 'image')->resize(50);}
+		
 		
       echo '      <tr class="dataTableRow ' . ($x%2==0 ? "" : "alt") . '">' . "\n" .
            '        <td class="dataTableContent" valign="top" align="">' . number_format($_item->getQtyOrdered(), 0) . '</td>' . "\n" .
            '         <td class="dataTableContent" valign="top">' . $_item->getSku() . '</td>' . "\n" . 
-		   '		 <td class="dataTableContent" valign="top">'. ($_showImages ? '<img src="'. $_imageURL. '">  ' : '') . $_item->getName();
+		   '		 <td class="dataTableContent" valign="top">'. ($_showImages && !empty($_imageURL) ? '<img src="'. $_imageURL. '">  ' : '') . $_item->getName();
 
 		if ($_options = $_item->getProductOptions()) {
 		
@@ -348,14 +354,27 @@ div.bottom div {
 					echo "<br /><em>" . $_option["label"] . ":</em>&nbsp;&nbsp;" . $_option["value"];
 			}
 			
+			$finalPrice=$_item->getPrice();
+			$rowTotal=$_item->getRowTotal();
+			
+			// add tax to product price
+			if ($_addVat && $_vatRate)
+			{
+				$finalPrice=round($_item->getPrice() + ($_item->getPrice() * ($_vatRate/100)),2);
+				$rowTotal=round($_item->getRowTotal() + ($_item->getRowTotal() * ($_vatRate/100)),2);
+				//$finalPrice=Mage::helper('tax')->getPrice($_product, $_product->getFinalPrice());
+			}
+			
+			
+			
 			
 			
         }
 		
 
       echo '        </td>' . "\n" .
-           '        <td class="dataTableContent" align="right" valign="top"><b>' . $_order->formatPriceTxt($_item->getPrice()) .  '</b></td>' . "\n" .
-           '        <td class="dataTableContent" align="right" valign="top"><b>' . $_order->formatPriceTxt($_item->getRowTotal()) . '</b></td>' . "\n";
+           '        <td class="dataTableContent" align="right" valign="top"><b>' . $_order->formatPriceTxt($finalPrice) .  '</b></td>' . "\n" .
+           '        <td class="dataTableContent" align="right" valign="top"><b>' . $_order->formatPriceTxt($rowTotal) . '</b></td>' . "\n";
       echo '      </tr>' . "\n";
 	  
 	  $x++;
@@ -366,7 +385,7 @@ div.bottom div {
       <td align="right" colspan="8"><table border="0" cellspacing="0" cellpadding="2" class="totals">
           <tr>
             <td align="right" class="label">Subtotal</td>
-            <td align="right"><strong><?php echo $_order->formatPriceTxt($_order->getSubtotal()) ?></strong></td>
+            <td align="right"><strong><?php echo ($_addVat && $_vatRate ? $_order->formatPriceTxt(round($_order->getSubtotal() + ($_order->getSubtotal() * ($_vatRate/100)),2)) : $_order->formatPriceTxt($_order->getSubtotal())) ?></strong></td>
           </tr>
           <?php if ($_order->getShippingDescription()): ?>
           <tr>
@@ -384,7 +403,7 @@ div.bottom div {
           
           <?php if ($_order->getTaxAmount() > 0): ?>
           <tr>
-            <td align="right" class="label">VAT</td>
+            <td align="right" class="label">VAT<?php echo ($_addVat ? ' ('. $_vatRate. '%)' : '') ?></td>
             <td align="right"><strong><?php echo $_order->formatPriceTxt($_order->getTaxAmount()) ?></strong></td>
           </tr>
           <?php endif; ?>
