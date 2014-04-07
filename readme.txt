@@ -1,6 +1,6 @@
 HTML Invoices - extensions@gaiterjones.com
 
-BETA TEST Extension
+See also standalone php app - https://github.com/gaiterjones/magento-invoices
 
 This extension creates customiseable HTML Invoices from Magento Orders.
 

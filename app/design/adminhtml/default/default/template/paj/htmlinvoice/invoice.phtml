@@ -396,7 +396,7 @@ div.bottom div {
           
           <?php if ($_order->getDiscountAmount() != 0): ?>
           <tr>
-            <td align="right" class="label"><?php echo $_order->getDiscountDescription() ?></td>
+            <td align="right" class="label">Discount<?php echo $_order->getDiscountDescription() ?></td>
             <td align="right"><strong><?php echo $_order->formatPriceTxt($_order->getDiscountAmount()) ?></strong></td>
           </tr>
           <?php endif; ?>
