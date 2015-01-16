@@ -2,11 +2,12 @@
 /**
  *  HTML Invoice
  *  
- *  Copyright (C) 2013 paj@gaiterjones.com 
+ *  Copyright (C) 2015 paj@gaiterjones.com 
  *
  *  v0.0.1 - 11.06.2012 - dev BETA release
  *  v0.0.2 - 15.08.2012
  	v0.13 - 26.07.2013
+	v0.14.1 - 16.01.2015 - display image of parent for grouped child products
  
  *	This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -323,17 +324,44 @@ div.bottom div {
 		
 		if ($_item->getParentItem()) continue;
 		
+		$_imageURL=false;
 		$_product = Mage::getModel('catalog/product')->load($_item->getProductId());
+		$_productType=$_product->getTypeId();
+
+		try{
+		  	// get image from either small image or normal image for simple product
+			$_imageURL = Mage::helper('catalog/image')->init($_product, 'small_image')->resize(50);
+		}
+		catch(Exception $e) {
+			$_imageURL=false;
+		}		
 		
-		// get image from either small image or normal image
-		$_imageURL = Mage::helper('catalog/image')->init($_product, 'small_image')->resize(50);
-		if (empty($_imageURL)) {$_imageURL = Mage::helper('catalog/image')->init($_product, 'image')->resize(50);}
+		// check for mums and dads
+		// -- get image from parent product of grouped products
+		if ($_productType == 'simple')
+		{
+			if (Mage::getVersion() >= 1.4)
+			{
+				// Magento v1.42 +
+				$_parentIdGrouped = Mage::getModel('catalog/product_type_grouped')->getParentIdsByChild( $_product->getId() );
+				$_parentIdConfigurable = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild( $_product->getId() );							
+			} else {
+				// pre 1.42
+				$_parentIdGrouped = $_product->loadParentProductIds()->getData('parent_product_ids');
+				$_parentIdConfigurable = $_product->loadParentProductIds()->getData('parent_product_ids');
+			}
 		
+			if (!empty($_parentIdGrouped[0])) // check for grouped product parent
+			{
+				$_parentProduct = Mage::getModel('catalog/product')->load($_parentIdGrouped[0]);
+				$_imageURL = Mage::helper('catalog/image')->init($_parentProduct, 'small_image')->resize(50);
+			}
+		}
 		
       echo '      <tr class="dataTableRow ' . ($x%2==0 ? "" : "alt") . '">' . "\n" .
            '        <td class="dataTableContent" valign="top" align="">' . number_format($_item->getQtyOrdered(), 0) . '</td>' . "\n" .
            '         <td class="dataTableContent" valign="top">' . $_item->getSku() . '</td>' . "\n" . 
-		   '		 <td class="dataTableContent" valign="top">'. ($_showImages && !empty($_imageURL) ? '<img src="'. $_imageURL. '">  ' : '') . $_item->getName();
+		   '		 <td class="dataTableContent" valign="top">'. ($_showImages && $_imageURL ? '<img src="'. $_imageURL. '">  ' : '') . $_item->getName();
 
 		if ($_options = $_item->getProductOptions()) {
 		
