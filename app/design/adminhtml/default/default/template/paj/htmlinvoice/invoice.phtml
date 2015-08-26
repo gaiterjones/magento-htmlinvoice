@@ -296,7 +296,7 @@ div.bottom div {
 	  <td valign="top"><p><?php echo $invoiceIdText . "  Number: <strong>". $invoiceId; ?></strong></p>
         <p>
 		Date:
-		  <strong> <?php echo date("d.m.Y");  ?> </strong><br />
+		  <strong> <?php echo $_order->getCreatedAtdate();  ?> </strong><br />
         Payment Method:
           <strong><?php echo $_order->getPayment()->getMethodInstance()->getTitle();  ?></strong><br />
         Delivery per:
