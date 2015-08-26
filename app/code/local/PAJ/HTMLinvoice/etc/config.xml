@@ -2,7 +2,7 @@
 <config>
   <modules>
     <PAJ_HTMLinvoice>
-      <version>0.13</version>
+      <version>0.14</version>
     </PAJ_HTMLinvoice>
   </modules>
   <global>
