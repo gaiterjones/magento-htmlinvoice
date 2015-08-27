@@ -1,0 +1,3 @@
+app/code/local/PAJ/HTMLinvoice		app/code/local/PAJ/HTMLinvoice
+app/etc/modules/PAJ_HTMLinvoice.xml	app/etc/modules/PAJ_HTMLinvoice.xml
+app/design/adminhtml/default/default/template/paj/htmlinvoice app/design/adminhtml/default/default/template/paj/htmlinvoice

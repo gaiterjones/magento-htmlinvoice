@@ -33,7 +33,7 @@
 								<show_in_store>0</show_in_store>
 								<comment>
 								This Magento module creates a customiseable HTML invoice accessed via a new print button in the admin order view.
-								<![CDATA[Please visit <a href="http://blog.gaiterjones.com">blog.gaiterjones.com</a> for full documentation for this extension.]]>
+								<![CDATA[Please visit <a href="http://blog.gaiterjones.com">blog.gaiterjones.com</a> for full documentation for this module.]]>
 								</comment>
 							</label1>
 							<logourl translate="label comment">

@@ -8,6 +8,7 @@
  *  v0.0.2 - 15.08.2012
  	v0.13 - 26.07.2013
 	v0.14.1 - 16.01.2015 - display image of parent for grouped child products
+	v0.14.2 - 27.08.2015 - get date from order instead of todays date
  
  *	This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -60,14 +61,12 @@
 
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
+<!DOCTYPE HTML>
+<html>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title><?php echo $invoiceIdText. " - ". $_order->getIncrementId(); ?></title>
-<link rel="stylesheet" type="text/css" href="includes/stylesheet.css">
-<link rel="stylesheet" type="text/css" href="includes/watermark.css">
 <style type="text/css">
+
 BODY {
 	font-family: Arial, Helvetica, sans-serif;
 	margin: 0;
@@ -245,7 +244,6 @@ div.bottom div {
 	display: none;
 }
 </style>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 </head>
 <body>
 <div class="option-menu">
@@ -285,7 +283,7 @@ div.bottom div {
 		<?php endif; ?> 
 		</div>
   </div>
-  
+  <!-- Header -->
   <table width="100%" border="0" cellspacing="0" cellpadding="2">
     <tr>
       <td valign="top"><p><strong>Invoice address:</strong></p>
@@ -304,7 +302,7 @@ div.bottom div {
         </p>	
     </tr>
   </table>
-  
+  <!-- Order -->
   <table border="0" width="99%" cellspacing="0" cellpadding="0">
     <tr class="dataTableHeadingRow">
       <td class="dataTableHeadingContent">Quantity</td>
@@ -410,6 +408,7 @@ div.bottom div {
     }
 ?>
     <tr>
+	<!-- Totals -->
       <td align="right" colspan="8"><table border="0" cellspacing="0" cellpadding="2" class="totals">
           <tr>
             <td align="right" class="label">Subtotal</td>
@@ -445,6 +444,7 @@ div.bottom div {
   
   <?php if ($_showComments): ?>
   <div id="notes"> <strong>Notes:</strong><br />
+    <!-- Comments -->
     <textarea id="comments_area">[Type your comments here]</textarea>
   </div>
   <?php endif; ?>  
