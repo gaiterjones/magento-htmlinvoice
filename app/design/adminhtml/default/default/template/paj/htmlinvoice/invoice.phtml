@@ -9,6 +9,7 @@
  	v0.13 - 26.07.2013
 	v0.14.1 - 16.01.2015 - display image of parent for grouped child products
 	v0.14.2 - 27.08.2015 - get date from order instead of todays date
+	v0.14.3 - 02.09.2015 - display invoice/order correctly, removed notes text, added notes hide checkbox
  
  *	This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,20 +44,23 @@
 	$_vatRate=trim(Mage::getStoreConfig('htmlinvoice_section1/general/vatrate',(int)$_orderStoreID));
  
 	// add tax to shipping amount
+	//
 	if ($_addVat && $_vatRate)
 	{
-	$shippingInclTax = $_order->getShippingAmount() + $_order->getShippingTaxAmount();
-	$_order->setShippingAmount($shippingInclTax);
+		$shippingInclTax = $_order->getShippingAmount() + $_order->getShippingTaxAmount();
+		$_order->setShippingAmount($shippingInclTax);
 	}
 	
+	// check for invoice
+	//
 	if ($_order->hasInvoices()) {
-		$invoiceIdText="Invoice";
+		$_invoiceIdText="Invoice";
 		foreach ($_order->getInvoiceCollection() as $_eachInvoice) {
-			$invoiceId = $_eachInvoice->getIncrementId();
+			$_invoiceId = $_eachInvoice->getIncrementId();
 		}
 	} else {
-			$invoiceIdText="Order";
-			$invoiceId = $_order->getIncrementId();
+			$_invoiceIdText="Order";
+			$_invoiceId = $_order->getIncrementId();
 	}
 
 
@@ -64,7 +68,7 @@
 <!DOCTYPE HTML>
 <html>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title><?php echo $invoiceIdText. " - ". $_order->getIncrementId(); ?></title>
+<title><?php echo $_invoiceIdText. " #". $_invoiceId; ?></title>
 <style type="text/css">
 
 BODY {
@@ -251,8 +255,10 @@ div.bottom div {
   <!-- Watermark Option -->
   <strong>Options:</strong> &nbsp;  
   <label>
-	<input id="cbk_paid" type="checkbox" onchange="if(this.checked){document.getElementById('watermark_graphic').style.display = 'block';}else{document.getElementById('watermark_graphic').style.display = 'none';}"  />
-  Display watermark graphic
+	Display watermark graphic<input id="cbk_paid" type="checkbox" onchange="if(this.checked){document.getElementById('watermark_graphic').style.display = 'block';}else{document.getElementById('watermark_graphic').style.display = 'none';}"  />
+	<?php if ($_showComments): ?>
+	Hide Comments<input id="hide_comment" type="checkbox" onchange="if(!this.checked){document.getElementById('notes').style.display = 'block';}else{document.getElementById('notes').style.display = 'none';}"  />
+    <?php endif; ?> 
   </label>
  <!-- END Watermark OPtion -->
 <?php endif; ?> 
@@ -269,7 +275,7 @@ div.bottom div {
 <?php endif; ?> 
 <div id="invoice" class="wrapper" >
   <!-- MAIN -->
-  <h1 style="float: right;">Invoice</h1>
+  <h1 style="float: right;"><?php echo $_invoiceIdText ?></h1>
 
   <div class="clearfix">
 		<?php if (!empty($_logoURL)): ?>
@@ -291,7 +297,7 @@ div.bottom div {
         <p><?php echo '<a href="mailto:' . $_order->getCustomerEmail() . '"><u>' . $_order->getCustomerEmail() . '</u></a>'; ?></p></td>
       <td valign="top"><p><strong>Delivery Address:</strong></p>
         <?php echo $_order->getShippingAddress()->format('html'); ?> </td>
-	  <td valign="top"><p><?php echo $invoiceIdText . "  Number: <strong>". $invoiceId; ?></strong></p>
+	  <td valign="top"><p><?php echo $_invoiceIdText . "  #: <strong>". $_invoiceId; ?></strong></p>
         <p>
 		Date:
 		  <strong> <?php echo $_order->getCreatedAtdate();  ?> </strong><br />
@@ -445,7 +451,7 @@ div.bottom div {
   <?php if ($_showComments): ?>
   <div id="notes"> <strong>Notes:</strong><br />
     <!-- Comments -->
-    <textarea id="comments_area">[Type your comments here]</textarea>
+    <textarea id="comments_area"></textarea>
   </div>
   <?php endif; ?>  
 
