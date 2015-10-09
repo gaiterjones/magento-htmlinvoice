@@ -25,7 +25,7 @@
 						<show_in_store>1</show_in_store>
 						<fields>
 							<label1 translate="label comment">
-								<label>v0.14 - 26.07.2013</label>
+								<label>v0.15 - 10.2015</label>
 								<frontend_type>note</frontend_type>
 								<sort_order>10</sort_order>
 								<show_in_default>1</show_in_default>
@@ -110,8 +110,8 @@
 								<show_in_website>1</show_in_website>
 								<show_in_store>1</show_in_store>
 								<comment>VAT Rate, i.e. 19 for 19% VAT</comment>
-							</vatrate>							
-						</fields>						
+							</vatrate>
+						</fields>
 					</general>
 				</groups>
         </htmlinvoice_section1>

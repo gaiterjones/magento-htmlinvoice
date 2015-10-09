@@ -2,7 +2,7 @@
 <config>
   <modules>
     <PAJ_HTMLinvoice>
-      <version>0.14</version>
+      <version>0.15</version>
     </PAJ_HTMLinvoice>
   </modules>
   <global>
@@ -31,26 +31,4 @@
       </htmlinvoice>
     </routers>
   </admin>
-	<adminhtml>
-		<acl>
-			<resources>
-				<admin>
-					<children>
-						<system>
-							<children>
-								<config>
-									<children>
-										<htmlinvoice_section1 translate="title" module="htmlinvoice">
-											<title>HTML Invoice Section 1 by PAJ</title>
-											<sort_order>10</sort_order>
-										</htmlinvoice_section1>
-									</children>
-								</config>
-							</children>
-						</system>
-					</children>
-				</admin>
-			</resources>
-		</acl>
-	</adminhtml>
 </config>

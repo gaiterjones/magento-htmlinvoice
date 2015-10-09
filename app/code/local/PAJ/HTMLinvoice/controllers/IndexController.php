@@ -18,15 +18,20 @@ class PAJ_HTMLinvoice_IndexController extends Mage_Adminhtml_Controller_Action
         Mage::register('current_order', $order);
         return $order;
     }
-	
-    
+
+
 	public function invoiceAction(){
 
 		if ($order = $this->_initOrder()) {
-			echo $this->getLayout()->createBlock('htmlinvoice/adminhtml_invoice')->toHtml();	
+			echo $this->getLayout()->createBlock('htmlinvoice/adminhtml_invoice')->toHtml();
 		}
-		
+
 	}
-	
-	
+
+	protected function _isAllowed()
+	{
+	    return true;
+	}	
+
+
 }
