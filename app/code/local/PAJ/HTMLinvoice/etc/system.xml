@@ -25,7 +25,6 @@
 						<show_in_store>1</show_in_store>
 						<fields>
 							<label1 translate="label comment">
-								<label>v0.15 - 10.2015</label>
 								<frontend_type>note</frontend_type>
 								<sort_order>10</sort_order>
 								<show_in_default>1</show_in_default>
@@ -33,7 +32,7 @@
 								<show_in_store>0</show_in_store>
 								<comment>
 								This Magento module creates a customiseable HTML invoice accessed via a new print button in the admin order view.
-								<![CDATA[Please visit <a href="http://blog.gaiterjones.com">blog.gaiterjones.com</a> for full documentation for this module.]]>
+								<![CDATA[Please visit <a href="http://blog.gaiterjones.com">blog.gaiterjones.com</a> for full documentation for this extension.]]>
 								</comment>
 							</label1>
 							<logourl translate="label comment">
@@ -110,8 +109,8 @@
 								<show_in_website>1</show_in_website>
 								<show_in_store>1</show_in_store>
 								<comment>VAT Rate, i.e. 19 for 19% VAT</comment>
-							</vatrate>
-						</fields>
+							</vatrate>							
+						</fields>						
 					</general>
 				</groups>
         </htmlinvoice_section1>

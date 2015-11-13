@@ -2,9 +2,20 @@
 <config>
   <modules>
     <PAJ_HTMLinvoice>
-      <version>0.15</version>
+      <version>0.2</version>
     </PAJ_HTMLinvoice>
   </modules>
+	<admin>
+	 <routers>
+			<adminhtml>
+				<args>
+					<modules>
+						<htmlinvoice before="Mage_Adminhtml">PAJ_HTMLinvoice_Adminhtml</htmlinvoice>
+					</modules>
+				</args>
+			</adminhtml>		 
+	 </routers>
+	</admin>  
   <global>
     <helpers>
       <htmlinvoice>
@@ -20,15 +31,4 @@
 		</adminhtml>
 	</blocks>
   </global>
-  <admin>
-    <routers>
-      <htmlinvoice>
-        <use>admin</use>
-        <args>
-          <module>PAJ_HTMLinvoice</module>
-          <frontName>htmlinvoice</frontName>
-        </args>
-      </htmlinvoice>
-    </routers>
-  </admin>
 </config>
