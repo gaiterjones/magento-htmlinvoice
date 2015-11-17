@@ -39,11 +39,21 @@ class PAJ_HTMLinvoice_Block_Sales_Order_View extends Mage_Adminhtml_Block_Sales_
 
         parent::__construct();
 		
+<<<<<<< HEAD
 		// additional invice print button
 		
 		$this->_addButton('order_reorder', array(
 			'label'     => Mage::helper('sales')->__('Print'),
 			'onclick'   => 'window.open(\'' . $this->getUrl('adminhtml/htmlinvoice_print/index/invoice') . '\')',
+=======
+		// additional invoice print button
+		
+		$this->_addButton('order_reorder', array(
+			'label'     => Mage::helper('sales')->__('Print'),
+			'onclick'   => 'window.open(\'' . $this->getUrl('htmlinvoice/index/invoice',array(
+                    'order_id' => $this->getOrderId()
+                )) . '\')',
+>>>>>>> ce7a871e060e1e5cd9c3baea7e23dd42e3ed7b39
 		));
 		
     }
