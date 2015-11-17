@@ -38,11 +38,10 @@ class PAJ_HTMLinvoice_Block_Sales_Order_Invoice_View extends Mage_Adminhtml_Bloc
     {
         parent::__construct();
 
-        $this->removeButton('print');
-        $this->_addButton('print', array(
-                'label'     => Mage::helper('sales')->__('Print'),
+        $this->_addButton('htmlinvoice_print', array(
+                'label'     => Mage::helper('htmlinvoice')->__('HTML Invoice Print'),
                 'class'     => 'save',
-                'onclick'   => 'window.open(\''.$this->getUrl('htmlinvoice/index/invoice',array(
+                'onclick'   => 'window.open(\''.$this->getUrl('adminhtml/htmlinvoice_print/invoice',array(
                         'order_id'  => $this->getInvoice()->getOrder()->getId()
                     )).'\')'
             )
