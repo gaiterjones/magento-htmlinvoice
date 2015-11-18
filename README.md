@@ -10,7 +10,7 @@ This Magento module adds an additional print button to the sales invoice view th
 
 ### Version
 ***
-	@version		0.14
+	@version		0.20
 	@since			08 2015
 	@author			gaiterjones
 	@documentation	blog.gaiterjones.com

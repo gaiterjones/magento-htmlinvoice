@@ -1,44 +1,21 @@
 <?xml version="1.0"?>
 <config>
-<<<<<<< HEAD
-  <modules>
-    <PAJ_HTMLinvoice>
-      <version>0.2</version>
-    </PAJ_HTMLinvoice>
-  </modules>
-	<admin>
-	 <routers>
-			<adminhtml>
-				<args>
-					<modules>
-						<htmlinvoice before="Mage_Adminhtml">PAJ_HTMLinvoice_Adminhtml</htmlinvoice>
-					</modules>
-				</args>
-			</adminhtml>		 
-	 </routers>
-	</admin>  
-  <global>
-    <helpers>
-      <htmlinvoice>
-        <class>PAJ_HTMLinvoice_Helper</class>
-      </htmlinvoice>
-    </helpers>
-	<blocks>
-		<htmlinvoice><class>PAJ_HTMLinvoice_Block</class></htmlinvoice>
-		<adminhtml>
-			<rewrite>
-				<sales_order_view>PAJ_HTMLinvoice_Block_Sales_Order_View</sales_order_view>
-			</rewrite>
-		</adminhtml>
-	</blocks>
-  </global>
-</config>
-=======
     <modules>
         <PAJ_HTMLinvoice>
-            <version>0.15</version>
+            <version>0.2</version>
         </PAJ_HTMLinvoice>
     </modules>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <htmlinvoice before="Mage_Adminhtml">PAJ_HTMLinvoice_Adminhtml</htmlinvoice>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
     <global>
         <helpers>
             <htmlinvoice>
@@ -59,16 +36,4 @@
             </adminhtml>
         </blocks>
     </global>
-    <admin>
-        <routers>
-            <htmlinvoice>
-                <use>admin</use>
-                <args>
-                    <module>PAJ_HTMLinvoice</module>
-                    <frontName>htmlinvoice</frontName>
-                </args>
-            </htmlinvoice>
-        </routers>
-    </admin>
 </config>
->>>>>>> ce7a871e060e1e5cd9c3baea7e23dd42e3ed7b39
