@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <adminhtml_sales_order_invoice_view>
+        <reference name="root">
+            <block type="page/html_head" name="salesreport.button" output="toHtml" template="paj/htmlinvoice/jsaddbutton.phtml" />
+        </reference>
+    </adminhtml_sales_order_invoice_view>
+
+    <adminhtml_sales_order_view>
+        <reference name="root">
+            <block type="page/html_head" name="salesreport.button" output="toHtml" template="paj/htmlinvoice/jsaddbutton.phtml" />
+        </reference>
+    </adminhtml_sales_order_view>
+</layout>

@@ -1,0 +1,25 @@
+<?php
+
+$orderId = intval(Mage::app()->getRequest()->getParam('order_id'));
+if(empty($orderId)){
+    $invoiceId = intval(Mage::app()->getRequest()->getParam('invoice_id'));
+    $orderId = Mage::getModel('sales/order_invoice')->load($invoiceId)->getOrder()->getId();
+}
+
+?>
+<script type="text/javascript">//<![CDATA[
+
+    document.observe('dom:loaded', function(){
+        var button = new Element('button',
+            {
+                id: 'htmlinvoice_print',
+                class: 'scalable save',
+                type: 'button',
+                onclick: 'window.open(\'<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/htmlinvoice_print/invoice",
+                array('order_id' => $orderId) ); ?>\');'
+            }).update('<span><span><span><?php echo Mage::helper("htmlinvoice")->__('HTML Invoice Print');?></span></span></span>');
+        $$('.form-buttons')[0].insert(button);
+    });
+
+    //]]>
+</script>
