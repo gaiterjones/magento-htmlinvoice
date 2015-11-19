@@ -14,7 +14,7 @@ $secretkey = Mage::getSingleton('adminhtml/url')->getSecretKey("salesreport/inde
                     id: 'htmlinvoice_print',
                     class: 'scalable save',
                     type: 'button',
-                    onclick: 'window.open(\'<?php echo Mage::helper("adminhtml")->getUrl("salesreport/index/create/",array("key" => $secretkey, 'order_id' => intval(Mage::app()->getRequest()->getParam('order_id'))) ); ?>\');'
+                    onclick: 'window.open(\'<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/htmlinvoice_print/invoice",array("key" => $secretkey, 'order_id' => intval(Mage::app()->getRequest()->getParam('order_id'))) ); ?>\');'
                 }).update('<span><span><span><?php echo Mage::helper("htmlinvoice")->__('HTML Invoice Print');?></span></span></span>');
             $$('.form-buttons')[0].insert(button);
         }
