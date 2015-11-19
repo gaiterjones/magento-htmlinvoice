@@ -2,7 +2,7 @@
 <config>
     <modules>
         <PAJ_HTMLinvoice>
-            <version>0.2</version>
+            <version>0.3</version>
         </PAJ_HTMLinvoice>
     </modules>
     <admin>
@@ -26,14 +26,23 @@
             <htmlinvoice>
                 <class>PAJ_HTMLinvoice_Block</class>
             </htmlinvoice>
-            <adminhtml>
-                <rewrite>
-                    <sales_order_view>PAJ_HTMLinvoice_Block_Sales_Order_View</sales_order_view>
-                </rewrite>
-                <rewrite>
-                    <sales_order_invoice_view>PAJ_HTMLinvoice_Block_Sales_Order_Invoice_View</sales_order_invoice_view>
-                </rewrite>
-            </adminhtml>
+            <!--<adminhtml>-->
+                <!--<rewrite>-->
+                    <!--<sales_order_view>PAJ_HTMLinvoice_Block_Sales_Order_View</sales_order_view>-->
+                <!--</rewrite>-->
+                <!--<rewrite>-->
+                    <!--<sales_order_invoice_view>PAJ_HTMLinvoice_Block_Sales_Order_Invoice_View</sales_order_invoice_view>-->
+                <!--</rewrite>-->
+            <!--</adminhtml>-->
         </blocks>
     </global>
+    <adminhtml>
+        <layout>
+            <updates>
+                <htmlinvoice>
+                    <file>paj/htmlinvoice/htmlinvoicebackend.xml</file>
+                </htmlinvoice>
+            </updates>
+        </layout>
+    </adminhtml>
 </config>

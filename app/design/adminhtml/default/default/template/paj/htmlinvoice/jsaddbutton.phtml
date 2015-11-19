@@ -1,0 +1,24 @@
+<?php
+
+$secretkey = Mage::getSingleton('adminhtml/url')->getSecretKey("salesreport/index/","create");
+
+?>
+<script type="text/javascript">//<![CDATA[
+
+    var checkIfInvoiceAvailable = parseInt(<?php echo intval($this->getCheckIfInvoiceAvailable()) ?>);
+    document.observe('dom:loaded', function(){
+
+        if(!checkIfInvoiceAvailable || $$('#order_invoices_table tbody tr').length > 0) {
+            var button = new Element('button',
+                {
+                    id: 'htmlinvoice_print',
+                    class: 'scalable save',
+                    type: 'button',
+                    onclick: 'window.open(\'<?php echo Mage::helper("adminhtml")->getUrl("salesreport/index/create/",array("key" => $secretkey, 'order_id' => intval(Mage::app()->getRequest()->getParam('order_id'))) ); ?>\');'
+                }).update('<span><span><span><?php echo Mage::helper("htmlinvoice")->__('HTML Invoice Print');?></span></span></span>');
+            $$('.form-buttons')[0].insert(button);
+        }
+    });
+
+    //]]>
+</script>
