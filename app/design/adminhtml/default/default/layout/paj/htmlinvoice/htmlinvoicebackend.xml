@@ -8,9 +8,7 @@
 
     <adminhtml_sales_order_view>
         <reference name="root">
-            <block type="page/html_head" name="salesreport.button" output="toHtml" template="paj/htmlinvoice/jsaddbutton.phtml">
-                <action method="setCheckIfInvoiceAvailable">1</action>
-            </block>
+            <block type="page/html_head" name="salesreport.button" output="toHtml" template="paj/htmlinvoice/jsaddbutton.phtml" />
         </reference>
     </adminhtml_sales_order_view>
 </layout>
