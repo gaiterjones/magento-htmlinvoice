@@ -263,7 +263,7 @@ $store_code = $order->getStore()->getCode(); ?>
                 <tr>
                     <td>Bestelldatum:</td>
                     <td><?php //echo $order->getOrder()->getCreatedAt();
-                        echo Mage::helper('core')->formatDate($order->getOrder()->getCreatedAt(), 'medium', false) ;?></td>
+                        echo Mage::helper('core')->formatDate($order->getCreatedAt(), 'medium', false) ;?></td>
                 </tr>
                 <tr>
                     <td>Bestellzeichen:</td>
