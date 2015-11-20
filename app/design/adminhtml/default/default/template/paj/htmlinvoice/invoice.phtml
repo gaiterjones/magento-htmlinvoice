@@ -31,7 +31,11 @@
  *
  */
 
+	$_invoiceId = '';
+
 	$_order = $this->getOrder();
+	/** @var Mage_Sales_Model_Order $_order */
+
 	$_orderStoreID=$_order->getStoreId();	
 	
 	$_logoURL=trim(Mage::getStoreConfig('htmlinvoice_section1/general/logourl',(int)$_orderStoreID));
@@ -67,6 +71,7 @@
 ?>
 <!DOCTYPE HTML>
 <html>
+<head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title><?php echo $_invoiceIdText. " #". $_invoiceId; ?></title>
 <style type="text/css">
@@ -89,14 +94,6 @@ BODY {
 	padding: 6px;
 	border-bottom: 2px solid #999;
 }
-.dataTableRow {
-	background: none;
-}
-.dataTableContent {
-	padding: 2px 6px;
-	border-bottom: 1px solid #eee;
-}
-
 .alt TD { background: #eee; }
 
 @media screen {
@@ -211,11 +208,11 @@ div.bottom div {
 
 
 .button {
-	-moz-box-shadow:inset 0px 1px 0px 0px #fce2c1;
-	-webkit-box-shadow:inset 0px 1px 0px 0px #fce2c1;
-	box-shadow:inset 0px 1px 0px 0px #fce2c1;
+	-moz-box-shadow:inset 0 1px 0 0 #fce2c1;
+	-webkit-box-shadow:inset 0 1px 0 0 #fce2c1;
+	box-shadow:inset 0 1px 0 0 #fce2c1;
 	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ffc477), color-stop(1, #fb9e25) );
-	background:-moz-linear-gradient( center top, #ffc477 5%, #fb9e25 100% );
+	background:-moz-linear-gradient( top, #ffc477 5%, #fb9e25 100% );
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffc477', endColorstr='#fb9e25');
 	background-color:#ffc477;
 	-moz-border-radius:6px;
@@ -224,15 +221,15 @@ div.bottom div {
 	border:1px solid #eeb44f;
 	display:inline-block;
 	color:#ffffff;
-	font-family:arial;
+	font-family: Arial, sans-serif;
 	font-size:15px;
 	font-weight:bold;
 	padding:6px 24px;
 	text-decoration:none;
-	text-shadow:1px 1px 0px #cc9f52;
+	text-shadow:1px 1px 0 #cc9f52;
 }.button:hover {
 	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fb9e25), color-stop(1, #ffc477) );
-	background:-moz-linear-gradient( center top, #fb9e25 5%, #ffc477 100% );
+	background:-moz-linear-gradient( top, #fb9e25 5%, #ffc477 100% );
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fb9e25', endColorstr='#ffc477');
 	background-color:#fb9e25;
 }.button:active {
@@ -283,7 +280,7 @@ div.bottom div {
 		<?php endif; ?> 
 
 		<?php if (!empty($_headerText)): ?>	
-		<div style=" margin: 0px 0 20px 80px;">
+		<div style=" margin: 0 0 20px 80px;">
 			<?php echo $_headerText ?> 	
 		</div>
 		<?php endif; ?> 
@@ -325,7 +322,7 @@ div.bottom div {
 	$x = 0; 
 	
    	foreach($_items as $_item) {
-		
+		/** @var Mage_Sales_Model_Order_Item $_item */
 		if ($_item->getParentItem()) continue;
 		
 		$_imageURL=false;
@@ -367,6 +364,9 @@ div.bottom div {
            '         <td class="dataTableContent" valign="top">' . $_item->getSku() . '</td>' . "\n" . 
 		   '		 <td class="dataTableContent" valign="top">'. ($_showImages && $_imageURL ? '<img src="'. $_imageURL. '">  ' : '') . $_item->getName();
 
+		$finalPrice=$_item->getPrice();
+		$rowTotal=$_item->getRowTotal();
+
 		if ($_options = $_item->getProductOptions()) {
 		
 			$result = array();
@@ -386,8 +386,8 @@ div.bottom div {
 					echo "<br /><em>" . $_option["label"] . ":</em>&nbsp;&nbsp;" . $_option["value"];
 			}
 			
-			$finalPrice=$_item->getPrice();
-			$rowTotal=$_item->getRowTotal();
+
+
 			
 			// add tax to product price
 			if ($_addVat && $_vatRate)
@@ -449,9 +449,10 @@ div.bottom div {
   </table>
   
   <?php if ($_showComments): ?>
-  <div id="notes"> <strong>Notes:</strong><br />
+  <div id="notes"><label for="comments_area"><strong>Notes:</strong></label><br />
     <!-- Comments -->
     <textarea id="comments_area"></textarea>
+
   </div>
   <?php endif; ?>  
 
