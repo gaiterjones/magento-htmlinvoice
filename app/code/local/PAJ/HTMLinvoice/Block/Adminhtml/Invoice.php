@@ -22,7 +22,7 @@ class PAJ_HTMLinvoice_Block_Adminhtml_Invoice extends Mage_Adminhtml_Block_Templ
     /**
      * @return string
      */
-    private function _getCurrentTemplate(){
+    protected function _getCurrentTemplate(){
         $template=trim(Mage::getStoreConfig('htmlinvoice_section1/general/templatefile', 'invoice' ));
         return 'paj/htmlinvoice/'.(empty($template)?'invoice':$template).'.phtml';
     }
