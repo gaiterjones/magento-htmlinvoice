@@ -290,6 +290,7 @@ $store_code = $order->getStore()->getCode(); ?>
             $_items = $order->getAllItems();
             $x = 0;
             foreach($_items as $_item) {
+                /** @var Mage_Sales_Model_Order_Item $_item */
                 /* Umleitung, wenn Artikel 0 EUR kostet (ist bei Konfigurierbaren Artikeln der Fall). */
                 if ($_item->getPrice() == 0){
                     goto end;
@@ -350,38 +351,30 @@ $store_code = $order->getStore()->getCode(); ?>
             </tr>
 
 
-            <?php $ergebnis7 = 0;
-            $ergebnis19 = 0; ?>
+            <?php
+            $ergebnis7 = 0;
+            $ergebnis19 = 0;
+            ?>
             <?php foreach($_items as $_item) { ?>
-        <?php $taxPercent = $_item->getOrderItem()->getTaxPercent(); ?>
+                <?php $taxPercent = $_item->getTaxPercent(); ?>
+                <?php $taxPercent = number_format($taxPercent); ?>
 
-        <?php $taxPercent = number_format($taxPercent); ?>
+                <?php
+                if ($taxPercent == 7){
+                    $ergebnis7 = $ergebnis7 + ($_item->getPrice() * number_format($_item->getQty(), 0) * 0.07);
+                    //echo "getTaxAmount = " . $_item->getTaxAmount();
+                    //echo " 7% gesamt: " . $ergebnis7;
+                }
+                else if ($taxPercent == 19){
+                    $ergebnis19 = $ergebnis19 + ($_item->getPrice() * number_format($_item->getQty(), 0) * 0.19);
+                    //echo " 19% gesamt: " . $ergebnis19;
+                }
+                $taxPercent = $taxPercent."%";
+                //$_item->getTaxAmount()." @".$taxPercent;
+                ?>
 
-        <?php
+            <?php } //foreach ?>
 
-        if ($taxPercent == 7){
-            $ergebnis7 = $ergebnis7 + ($_item->getPrice() * number_format($_item->getQty(), 0) * 0.07);
-
-            //echo "getTaxAmount = " . $_item->getTaxAmount();
-            //echo " 7% gesamt: " . $ergebnis7;
-        }
-        else if ($taxPercent == 19){
-            $ergebnis19 = $ergebnis19 + ($_item->getPrice() * number_format($_item->getQty(), 0) * 0.19);
-            //echo " 19% gesamt: " . $ergebnis19;
-        }
-
-        ?>
-
-        <?php $taxPercent = $taxPercent."%"; ?>
-
-        <?php $_item->getTaxAmount()." @".$taxPercent; ?>
-            <!-- Einzelne MwSt. Auflistung
-                <tr class="shipping-tax">
-              <td colspan="3" align="right" class="label">MwSt.(<?php echo $taxPercent = $taxPercent; ?>) </td>
-              <td align="right"><strong><?php echo ($_item->getPrice() * 0.07) ?></strong></td>
-            </tr><?php } ?>
-
-                          Einzelne MwSt. Ende -->
             <?php if ($ergebnis7 > 0){ ?>
                 <tr>
                     <td colspan="3" align="right" class="label">Steuern 7% (ohne Versand)</td>
@@ -396,18 +389,6 @@ $store_code = $order->getStore()->getCode(); ?>
                 </tr>
             <?php } ?>
 
-            <!-- <?php if ($order->getTaxAmount() > 0): ?>
-            <tr>
-              <td colspan="3" align="right" class="label">Gesamtbetrag Steuern</td>
-              <td align="right"><strong><?php echo Mage::helper('core')->currency($order->getTaxAmount()) ?></strong></td>
-            </tr>
-            <?php endif; ?>-->
-            <?php if($order->getMagikfee() > 0): ?>
-                <tr class="total">
-                    <td colspan="3" align="right" class="label"><strong>Kühlverpackung inkl 19% MwSt</strong></td>
-                    <td align="right"><strong><?php echo Mage::helper('core')->currency($order->getMagikfee()) ?></strong></td>
-                </tr>
-            <?php endif; ?>
             <tr class="total">
                 <td colspan="3" align="right" class="label"><strong>Gesamtsumme</strong></td>
                 <td align="right"><strong><?php echo Mage::helper('core')->currency($order->getGrandTotal()) ?></strong></td>
@@ -415,11 +396,6 @@ $store_code = $order->getStore()->getCode(); ?>
 
         </table>
     </div>
-    <!--<div class="store-address">
-    <address>
-    <?php echo Mage::getStoreConfig('general/store_information/address'); ?>
-    </address>
-  </div>-->
     <div align="center" class="footer"><?php echo $footerText ?></div>
 </div>
 </body>
