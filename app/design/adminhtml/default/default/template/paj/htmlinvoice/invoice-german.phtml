@@ -1,0 +1,424 @@
+<?php
+$order = $this->getOrder();
+$_orderStoreID=$order->getStoreId();
+
+$date = substr($order->getCreated_at(),0,10);
+
+$logoURL=trim(Mage::getStoreConfig('htmlinvoice_section1/general/logourl',(int)$_orderStoreID));
+$watermarkURL=trim(Mage::getStoreConfig('htmlinvoice_section1/general/watermark',(int)$_orderStoreID));
+$headerText=trim(Mage::getStoreConfig('htmlinvoice_section1/general/headertext',(int)$_orderStoreID));
+$showComments=trim(Mage::getStoreConfig('htmlinvoice_section1/general/showcomments',(int)$_orderStoreID));
+$_showImages=trim(Mage::getStoreConfig('htmlinvoice_section1/general/showimages',(int)$_orderStoreID));
+$footerText=trim(Mage::getStoreConfig('htmlinvoice_section1/general/footertext',(int)$_orderStoreID));
+$_addVat=trim(Mage::getStoreConfig('htmlinvoice_section1/general/addvat',(int)$_orderStoreID));
+$_vatRate=trim(Mage::getStoreConfig('htmlinvoice_section1/general/vatrate',(int)$_orderStoreID));
+
+// add tax to shipping amount
+if ($_addVat && $_vatRate)
+{
+    $shippingInclTax = $order->getShippingAmount() + $order->getShippingTaxAmount();
+    $order->setShippingAmount($shippingInclTax);
+}
+
+if ($order->hasInvoices()) {
+    $invoiceIdText="Invoice";
+    foreach ($order->getInvoiceCollection() as $_eachInvoice) {
+        $invoiceId = $_eachInvoice->getIncrementId();
+    }
+} else {
+    $invoiceIdText="Invoice";
+    $invoiceId = $order->getIncrementId();
+}
+
+?>
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title><?php echo $invoiceIdText. " #". $_invoiceId; ?></title>
+    <style type="text/css">
+        BODY {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            font-size: 12px;
+        }
+        p { margin:0px; padding:0px; }
+        .wrapper {      margin: 20px; }
+        .invoice_content { }
+        .invoice_address { float:left; display:block; }
+        .bill_details { float:right; display:block; }
+        .payment { margin-top:20px; }
+        .footer { margin-top:20px; }
+        .order_details { margin-top:15px; }
+        @media screen {
+            #printFooter {
+                display: none;
+            }
+        }
+        @media print {
+            #printFooter {
+                position: fixed;
+                bottom: 0;
+            }
+        }
+
+        .option-menu {
+            padding: 8px;
+            background: #eee;
+            font-size: 10px;
+        }
+        div.watermark {
+            display:block;
+            position:fixed;
+            z-index:100;
+            width:100%;
+            height:100%;
+        }
+        div.content > *:first-child, x:-moz-any-link {
+            margin-top:0;
+        }/* ff only */
+        div.watermark, x:-moz-any-link {
+            z-index:auto;
+        }/* ff only */
+        div.watermark, x:-moz-any-link, x:default {
+            z-index:100;
+        }/* ff3 only */
+        @media all and (min-width: 0px) {
+            div.watermark {
+                width:8.5in;
+            }
+        } /* opera only */
+        div.watermark div {
+            position:absolute;
+            left:0;
+            width:99%;
+        }
+        /* watermark position */
+        /* horizontal */
+        div.left {
+            text-align:left;
+        }
+        div.center {
+            text-align:center;
+        }
+        div.right {
+            text-align:right;
+        }
+        .shipping-tax{background-color: #DAE1E4;}
+        body:last-child:not(:root:root) div.right div {
+            left:-160px;
+        }/* safari only */
+        /* vertical */
+        div.top div {
+            top:0;
+        }
+        div.middle div {
+            top:50%;
+            margin-top:-210px;
+        }
+        div.bottom div {
+            bottom:2px;
+        }
+        .clearfix:after {
+            content: ".";
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        }
+        .clearfix {
+            display: inline-block;
+        }  /* for IE/Mac */
+
+
+        .button {
+            -moz-box-shadow:inset 0px 1px 0px 0px #fce2c1;
+            -webkit-box-shadow:inset 0px 1px 0px 0px #fce2c1;
+            box-shadow:inset 0px 1px 0px 0px #fce2c1;
+            background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ffc477), color-stop(1, #fb9e25) );
+            background:-moz-linear-gradient( center top, #ffc477 5%, #fb9e25 100% );
+            filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffc477', endColorstr='#fb9e25');
+            background-color:#ffc477;
+            -moz-border-radius:6px;
+            -webkit-border-radius:6px;
+            border-radius:6px;
+            border:1px solid #eeb44f;
+            display:inline-block;
+            color:#ffffff;
+            font-family:arial;
+            font-size:15px;
+            font-weight:bold;
+            padding:6px 24px;
+            text-decoration:none;
+            text-shadow:1px 1px 0px #cc9f52;
+        }.button:hover {
+             background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fb9e25), color-stop(1, #ffc477) );
+             background:-moz-linear-gradient( center top, #fb9e25 5%, #ffc477 100% );
+             filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fb9e25', endColorstr='#ffc477');
+             background-color:#fb9e25;
+         }.button:active {
+              position:relative;
+              top:1px;
+          }
+        /*invoice Table*/
+        .my-invoice-table {
+            border:1px solid #ddd;
+            border-collapse:collapse;
+        }
+        .my-invoice-table td{
+            border:1px solid #ddd;
+            padding-left:10px;
+            padding-right:10px;
+        }
+        .bill_details table {
+            border:1px solid #ddd;
+            border-collapse:collapse;
+        }
+        .bill_details table td{
+            border:1px solid #ddd;
+            padding:4px 10px;
+
+        }
+        .invoice-footer
+        {
+            text-align:center;
+            width:100%;
+            line-height:22px;
+        }
+        .invoice-footer td
+        {
+            text-align:center;
+            /*text-align: -moz-center;*/
+        }
+        .invoice-footer .invoice-address
+        {
+            text-align:center;
+            width:80%;
+        }
+        .invoice-footer .invoice-address td
+        {
+            text-align:left;
+        }
+    </style>
+    <style media="print" type="text/css">
+        .wrapper {
+            margin: 0;
+        }
+        .option-menu {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="option-menu">
+    <?php if (!empty($watermarkURL)): ?>
+        <!-- Watermark Option -->
+        <strong>Options:</strong> &nbsp;
+        <label>
+            <input id="cbk_paid" type="checkbox" onchange="if(this.checked){document.getElementById('watermark_graphic').style.display = 'block';}else{document.getElementById('watermark_graphic').style.display = 'none';}"  />
+            Display watermark graphic </label>
+        <!-- END Watermark OPtion -->
+    <?php endif; ?>
+    <!-- Print Button -->
+    <p> <a href="#" class="button" onclick="window.print(); return false;"><?php echo $this->__('Print') ?></a> </p>
+    <!-- END Print Button -->
+</div>
+<?php if (!empty($watermarkURL)): ?>
+    <div id="watermark_graphic" class="watermark middle center" style="display: none;">
+        <div><img src="<?php echo $watermarkURL; ?>" /></div>
+    </div>
+<?php endif; ?>
+<?php $store_id = $order->getStoreId();
+$store_code = $order->getStore()->getCode(); ?>
+<div id="invoice" class="wrapper" style="width:800px; float:left; background:#FFF; padding:20px; margin-bottom:10px; border:1px solid #ccc; " >
+    <div align="center" style="border-bottom:2px solid #ddd;padding-bottom:10px;"><img src="<?php echo $logoURL; ?>" /> </div>
+    <br/>
+    <div class="invoice_content">
+        <div class="invoice_address">
+
+            <?php echo $order->getBillingAddress()->format('html'); ?>
+            <p><?php echo '<a href="mailto:' . $order->getCustomerEmail() . '"><u>' . $order->getCustomerEmail() . '</u></a>'; ?></p>
+        </div>
+
+        <div class="bill_details">
+            <table cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                <tr>
+                    <th colspan="2" align="center"><h3 style="text-align:center"><?php echo $this->__('Rechnung') ?></h3></th>
+                </tr>
+                <tr>
+                    <td>Rechnungs-Nr.:</td>
+                    <td><?php echo $order->getIncrementId(); ?></td>
+                </tr>
+                <tr>
+                    <td>Rechnungsdatum:</td>
+                    <td><?php //echo substr($order->getCreated_at(),0,10);
+                        echo Mage::helper('core')->formatDate($order->getCreatedAt(), 'medium', false); ?></td>
+                </tr>
+                <tr>
+                    <td>Leistungsdatum:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Bestelldatum:</td>
+                    <td><?php //echo $order->getOrder()->getCreatedAt();
+                        echo Mage::helper('core')->formatDate($order->getOrder()->getCreatedAt(), 'medium', false) ;?></td>
+                </tr>
+                <tr>
+                    <td>Bestellzeichen:</td>
+                    <td><?php echo $order->getOrderIncrementId(); ?></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="clear:both"></div>
+    </div>
+
+    <div class="order_details">
+        <table class="my-invoice-table" border="0" width="100%" cellspacing="0" cellpadding="5" >
+            <tr>
+                <th width="50px" >Menge</th>
+                <th align="left">Artikelbezeichnung</th>
+                <th width="70px" align="right">Einzelpreis</th>
+                <th width="70px" align="right">Betrag</th>
+            </tr>
+            <?php
+            $_items = $order->getAllItems();
+            $x = 0;
+            foreach($_items as $_item) {
+                /* Umleitung, wenn Artikel 0 EUR kostet (ist bei Konfigurierbaren Artikeln der Fall). */
+                if ($_item->getPrice() == 0){
+                    goto end;
+
+                }
+                if ($_item->getParentItem()) continue;
+                echo '<tr class="dataTableRow ' . ($x%2==0 ? "" : "alt") . '">' . "\n" .
+                    '    <td valign="top" align="center">' . number_format($_item->getQty(), 0) . '</td>' . "\n" .
+                    '    <td class="dataTableContent" valign="top">'.$_item->getSku().' - '.$_item->getName();
+
+                if ($options = $_item->getProductOptions()) {
+
+                    $result = array();
+
+                    if (isset($options['options'])) {
+                        $result = array_merge($result, $options['options']);
+                    }
+                    if (isset($options['additional_options'])) {
+                        $result = array_merge($result, $options['additional_options']);
+                    }
+                    if (!empty($options['attributes_info'])) {
+                        $result = array_merge($options['attributes_info'], $result);
+                    }
+
+                    // loop and print
+                    foreach ($result as $_option) {
+                        echo "<br /><em>" . $_option["label"] . ":</em>&nbsp;&nbsp;" . $_option["value"];
+                    }
+                }
+                echo '    </td>' . "\n" .
+                    '    <td align="right" valign="top">' . Mage::helper('core')->currency($_item->getPrice()) .  '</td>' . "\n" .
+                    '    <td align="right" valign="top"><b>' . Mage::helper('core')->currency($_item->getRowTotal()) . '</b></td>' . "\n";
+                echo '</tr>' . "\n";
+                end: echo'';
+                $x++;
+            }
+            ?>
+
+            <tr>
+                <td colspan="3" align="right" class="label">Zwischensumme</td>
+                <td align="right"><strong><?php echo Mage::helper('core')->currency($order->getSubtotal()) ?></strong></td>
+            </tr>
+            <?php //echo ">>>".$order->getOrder()->getShippingDescription(); ?>
+            <?php if ($order->getOrder()->getShippingDescription()): ?>
+                <tr>
+                    <td colspan="3" align="right" class="label">Porto u. Verpackung<?php //echo $order->getOrder()->getShippingDescription() ?></td>
+                    <td align="right"><strong><?php echo Mage::helper('core')->currency($order->getOrder()->getShippingAmount()) ?></strong></td>
+                </tr>
+            <?php endif; ?>
+            <?php if ($order->getOrder()->getDiscountAmount() != 0): ?>
+                <tr>
+                    <td colspan="3" align="right" class="label"><?php echo $order->getOrder()->getDiscountDescription() ?></td>
+                    <td align="right"><strong><?php echo Mage::helper('core')->currency($order->getOrder()->getDiscountAmount()) ?></strong></td>
+                </tr>
+            <?php endif; ?>
+            <tr class="shipping-tax">
+                <td colspan="3" align="right" class="label">Steuer f&uuml;r Versand & Bearbeitung</td>
+                <td align="right"><strong><?php echo Mage::helper('core')->currency($order->getOrder()->getShippingTaxAmount()) ?></strong></td>
+            </tr>
+
+
+            <?php $ergebnis7 = 0;
+            $ergebnis19 = 0; ?>
+            <?php foreach($_items as $_item) { ?>
+        <?php $taxPercent = $_item->getOrderItem()->getTaxPercent(); ?>
+
+        <?php $taxPercent = number_format($taxPercent); ?>
+
+        <?php
+
+        if ($taxPercent == 7){
+            $ergebnis7 = $ergebnis7 + ($_item->getPrice() * number_format($_item->getQty(), 0) * 0.07);
+
+            //echo "getTaxAmount = " . $_item->getTaxAmount();
+            //echo " 7% gesamt: " . $ergebnis7;
+        }
+        else if ($taxPercent == 19){
+            $ergebnis19 = $ergebnis19 + ($_item->getPrice() * number_format($_item->getQty(), 0) * 0.19);
+            //echo " 19% gesamt: " . $ergebnis19;
+        }
+
+        ?>
+
+        <?php $taxPercent = $taxPercent."%"; ?>
+
+        <?php $_item->getTaxAmount()." @".$taxPercent; ?>
+            <!-- Einzelne MwSt. Auflistung
+                <tr class="shipping-tax">
+              <td colspan="3" align="right" class="label">MwSt.(<?php echo $taxPercent = $taxPercent; ?>) </td>
+              <td align="right"><strong><?php echo ($_item->getPrice() * 0.07) ?></strong></td>
+            </tr><?php } ?>
+
+                          Einzelne MwSt. Ende -->
+            <?php if ($ergebnis7 > 0){ ?>
+                <tr>
+                    <td colspan="3" align="right" class="label">Steuern 7% (ohne Versand)</td>
+                    <td align="right"><strong><?php echo number_format($ergebnis7, $decimals = 2, $dec_point = ',' ,$thousands_sep = '.') . " €" ?></strong></td>
+                </tr>
+            <?php } ?>
+
+            <?php if ($ergebnis19 > 0){ ?>
+                <tr>
+                    <td colspan="3" align="right" class="label">Steuern 19% (ohne Versand)</td>
+                    <td align="right"><strong><?php echo number_format($ergebnis19, $decimals = 2, $dec_point = ',' ,$thousands_sep = '.') . " €" ?></strong></td>
+                </tr>
+            <?php } ?>
+
+            <!-- <?php if ($order->getOrder()->getTaxAmount() > 0): ?>
+            <tr>
+              <td colspan="3" align="right" class="label">Gesamtbetrag Steuern</td>
+              <td align="right"><strong><?php echo Mage::helper('core')->currency($order->getOrder()->getTaxAmount()) ?></strong></td>
+            </tr>
+            <?php endif; ?>-->
+            <?php if($order->getMagikfee() > 0): ?>
+                <tr class="total">
+                    <td colspan="3" align="right" class="label"><strong>Kühlverpackung inkl 19% MwSt</strong></td>
+                    <td align="right"><strong><?php echo Mage::helper('core')->currency($order->getMagikfee()) ?></strong></td>
+                </tr>
+            <?php endif; ?>
+            <tr class="total">
+                <td colspan="3" align="right" class="label"><strong>Gesamtsumme</strong></td>
+                <td align="right"><strong><?php echo Mage::helper('core')->currency($order->getGrandTotal()) ?></strong></td>
+            </tr>
+
+        </table>
+    </div>
+    <!--<div class="store-address">
+    <address>
+    <?php echo Mage::getStoreConfig('general/store_information/address'); ?>
+    </address>
+  </div>-->
+    <div align="center" class="footer"><?php echo $footerText ?></div>
+</div>
+</body>
+</html>
