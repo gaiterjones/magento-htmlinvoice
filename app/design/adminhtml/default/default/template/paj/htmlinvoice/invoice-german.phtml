@@ -298,7 +298,7 @@ $store_code = $order->getStore()->getCode(); ?>
                 }
                 if ($_item->getParentItem()) continue;
                 echo '<tr class="dataTableRow ' . ($x%2==0 ? "" : "alt") . '">' . "\n" .
-                    '    <td valign="top" align="center">' . number_format($_item->getQty(), 0) . '</td>' . "\n" .
+                    '    <td valign="top" align="center">' . number_format($_item->getQtyOrdered(), 0) . '</td>' . "\n" .
                     '    <td class="dataTableContent" valign="top">'.$_item->getSku().' - '.$_item->getName();
 
                 if ($options = $_item->getProductOptions()) {
