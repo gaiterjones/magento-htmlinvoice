@@ -46,7 +46,7 @@ if ($order->hasInvoices()) {
             padding: 0;
             font-size: 12px;
         }
-        p { margin:0px; padding:0px; }
+        p { margin:0; padding:0; }
         .wrapper {      margin: 20px; }
         .invoice_content { }
         .invoice_address { float:left; display:block; }
@@ -136,11 +136,11 @@ if ($order->hasInvoices()) {
 
 
         .button {
-            -moz-box-shadow:inset 0px 1px 0px 0px #fce2c1;
-            -webkit-box-shadow:inset 0px 1px 0px 0px #fce2c1;
-            box-shadow:inset 0px 1px 0px 0px #fce2c1;
+            -moz-box-shadow:inset 0 1px 0 0 #fce2c1;
+            -webkit-box-shadow:inset 0 1px 0 0 #fce2c1;
+            box-shadow:inset 0 1px 0 0 #fce2c1;
             background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ffc477), color-stop(1, #fb9e25) );
-            background:-moz-linear-gradient( center top, #ffc477 5%, #fb9e25 100% );
+            background:-moz-linear-gradient( top, #ffc477 5%, #fb9e25 100% );
             filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffc477', endColorstr='#fb9e25');
             background-color:#ffc477;
             -moz-border-radius:6px;
@@ -149,15 +149,15 @@ if ($order->hasInvoices()) {
             border:1px solid #eeb44f;
             display:inline-block;
             color:#ffffff;
-            font-family:arial;
+            font-family: Arial, sans-serif;
             font-size:15px;
             font-weight:bold;
             padding:6px 24px;
             text-decoration:none;
-            text-shadow:1px 1px 0px #cc9f52;
+            text-shadow:1px 1px 0 #cc9f52;
         }.button:hover {
              background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fb9e25), color-stop(1, #ffc477) );
-             background:-moz-linear-gradient( center top, #fb9e25 5%, #ffc477 100% );
+             background:-moz-linear-gradient( top, #fb9e25 5%, #ffc477 100% );
              filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fb9e25', endColorstr='#ffc477');
              background-color:#fb9e25;
          }.button:active {
@@ -361,12 +361,12 @@ $store_code = $order->getStore()->getCode(); ?>
 
                 <?php
                 if ($taxPercent == 7){
-                    $ergebnis7 = $ergebnis7 + ($_item->getPrice() * number_format($_item->getQty(), 0) * 0.07);
+                    $ergebnis7 = $ergebnis7 + ($_item->getPrice() * number_format($_item->getQtyOrdered(), 0) * 0.07);
                     //echo "getTaxAmount = " . $_item->getTaxAmount();
                     //echo " 7% gesamt: " . $ergebnis7;
                 }
                 else if ($taxPercent == 19){
-                    $ergebnis19 = $ergebnis19 + ($_item->getPrice() * number_format($_item->getQty(), 0) * 0.19);
+                    $ergebnis19 = $ergebnis19 + ($_item->getPrice() * number_format($_item->getQtyOrdered(), 0) * 0.19);
                     //echo " 19% gesamt: " . $ergebnis19;
                 }
                 $taxPercent = $taxPercent."%";
