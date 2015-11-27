@@ -26,11 +26,11 @@ if ($order->hasInvoices()) {
     $invoiceIdText="Invoice";
     foreach ($order->getInvoiceCollection() as $_eachInvoice) {
         /** @var Mage_Sales_Model_Resource_Order_Invoice_Collection $invoiceId */
-        $invoiceId = $_eachInvoice->getIncrementId();
+        $_invoiceId = $_eachInvoice->getIncrementId();
     }
 } else {
     $invoiceIdText="Invoice";
-    $invoiceId = $order->getIncrementId();
+    $_invoiceId = $order->getIncrementId();
 }
 
 ?>
