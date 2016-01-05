@@ -26,14 +26,6 @@
             <htmlinvoice>
                 <class>PAJ_HTMLinvoice_Block</class>
             </htmlinvoice>
-            <!--<adminhtml>-->
-                <!--<rewrite>-->
-                    <!--<sales_order_view>PAJ_HTMLinvoice_Block_Sales_Order_View</sales_order_view>-->
-                <!--</rewrite>-->
-                <!--<rewrite>-->
-                    <!--<sales_order_invoice_view>PAJ_HTMLinvoice_Block_Sales_Order_Invoice_View</sales_order_invoice_view>-->
-                <!--</rewrite>-->
-            <!--</adminhtml>-->
         </blocks>
     </global>
     <adminhtml>
@@ -45,4 +37,20 @@
             </updates>
         </layout>
     </adminhtml>
+    <default>
+        <htmlinvoice_section1>
+            <general>
+                <label1></label1>
+                <watermark></watermark>
+                <logourl></logourl>
+                <headertext></headertext>
+                <showcomments></showcomments>
+                <showimages></showimages>
+                <footertext></footertext>
+                <addvat></addvat>
+                <vatrate></vatrate>
+                <templatefile>invoice</templatefile>
+            </general>
+        </htmlinvoice_section1>
+    </default>
 </config>
